@@ -1,0 +1,38 @@
+.axis {
+  font: 12px sans-serif;
+}
+
+.axisX path,
+.axisX line,
+.axisY path,
+.axisY line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2.5px;
+}
+
+.tick line {
+  stroke-width: 1.5px;
+	opacity: 0.2
+}
+
+.refY {
+  stroke-width: 1.5px;
+	opacity: 1
+}
+
+.point {
+  fill: none;
+  stroke-width: 2.5px;
+}
+
+.line {
+  fill: none;
+  stroke-width: 2.5px;
+}
+
+.area {
+  opacity: 0.4;
+  stroke: none;
+}
+

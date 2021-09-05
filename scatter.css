@@ -1,3 +1,26 @@
+h1 {
+  color: hsl(33, 46%, 95%);
+  text-align: center;
+}
+
+body {
+  background-color: black;
+}
+
+button {
+  background-color: hsl(33, 0%, 80%);
+}
+
+.content {
+  max-width: 960px;
+  min-height: 50px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: hsl(33, 46%, 95%);
+}
+
 .axis {
   font: 12px sans-serif;
 }

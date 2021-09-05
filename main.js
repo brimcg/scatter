@@ -1,7 +1,6 @@
 //Copyright Brian McGinnis 2017
 
 var color = d3.scaleOrdinal(d3.schemeCategory10);
-var channels = 128;
 
 //layout view
 var body = d3.select("body")
@@ -9,72 +8,98 @@ var body = d3.select("body")
 	.on("dblclick.zoom", null);
 
 //main
+body.append("h1")
+	.text("Scatter Plot");
+
 var main = body.append("div")
-	.attr("id", "main");
-var mainWidth = main.property("clientWidth");
+	.attr("id", "main")
+	.attr("class", "content");
+var mainWidth = 1.0 * main.property("clientWidth");
 	
 //Create scatter plot
-var plot = new Scatter("#main", mainWidth, mainWidth/2.5);
+var plot = new Scatter("#main", mainWidth, 0.67 * mainWidth);
 
-//Establish scatter plot data
-var exampleData = new ScatterData();
-exampleData.loadX(d3.range(channels));
-exampleData.scales(exampleData.autoX(), [0, 100]);
-exampleData.labels("Channel", "% of Full Scale");
-exampleData.pushReferenceY(0);
-exampleData.pushReferenceY(50, "yellow");
-exampleData.pushReferenceY(100, "red");
-exampleData.transit(750);
+var updateDiv = body.append("div")
+	.attr("class", "content");
 
-//Update example data
-var noise = d3.randomNormal(0, 0.025);
-var inc = true;
-var power = 0;
-var types = ["points", "line", "area"];
-var typeinc = 0;
+updateDiv.append("button")
+	.text("Update")
+	.on("click", update);
+
+var loadDiv = body.append("div")
+	.attr("class", "content");
+
+loadDiv.append("button")
+	.text("Load")
+	.on("click", function() {
+		alert("Load");
+	});
+
+loadDiv.append("input")
+	.attr("type", "text")
+	.attr("placeholder", "URL or file...");
+
+loadDiv.append("button")
+	.text("Browse...")
+	.on("click", function() {
+		alert("Browse");
+	});
+
+body.append("div")
+	.attr("class", "content")
+	.text("Data for scatter plot (separated by commas)");
+
+var dataDiv = body.append("div")
+	.attr("id", "dataDiv")
+	.attr("class", "content");
+
+var dataArea = dataDiv.append("textarea")
+	.attr("id", "dataArea")
+	.attr("name", "dataArea")
+	.attr("rows", "25")
+	.attr("cols", "100")
+	.text("X,Y\n0,0\n1,1\n");
+
+body.append("div")
+	.attr("class", "content")
+	.text("...");
+
+var transit = 0;
 
 function update()
 {
-	if(inc)
-	{
-		var line = [];
-		var peak = Math.pow(exampleData.x.data[channels-1], power);
+	var data = d3.csvParseRows(dataArea.property("value"));
+	var cols = 0;
+	data.forEach(function(row) {
+		if(row.length > cols) { cols = row.length };
+	});
 
-		exampleData.x.data.forEach(function(x, i)
-		{
-			line.push(100*(noise() + Math.pow(x, power)/peak));  //Zero base area in this example
-			if(!(i % 10))
-			{
-				line.pop();
-				line.push(null);
-			};
+	var dataParsed = [];
+	data.forEach(function(row) {
+		var rowParsed = Array(cols);
+		row.forEach(function(e, i) {
+			val = parseFloat(e);
+			rowParsed[i] = val;
 		});
-		exampleData.pushY(line, types[typeinc], color(power), "x^" + power);
-		if(power < 12)
-		{
-			power+=2;
+		if(!Object.is(NaN, rowParsed[0])) {
+			dataParsed.push(rowParsed);
 		}
-		else
-		{
-			inc = false;
-		}
-	}
-	else
-	{
-		if(power > 0)
-		{
-			exampleData.popY();
-			power-=2;
-		}
-		else
-		{
-			exampleData.popY();
-			inc = true;
-			typeinc = (typeinc+1)%3;
-		}
-	}
-	exampleData.scales(null, exampleData.autoY());
-	plot.update(exampleData);
+	});
+	dataParsed = d3.transpose(dataParsed);
+	
+	var plotData = new ScatterData();
+	plotData.loadX(dataParsed[0]);
+	dataParsed.slice(1).forEach(function(d, i) {
+		plotData.pushY(d, null, color(i));
+	});
+	plotData.scales(plotData.autoX(), plotData.autoY());
+	plotData.labels("X-axis", "Y-axis");
+	plotData.pushReferenceX(0);
+	plotData.pushReferenceY(0);
+	plotData.transit(transit);
+
+	plot.update(plotData);
 }
 
-setInterval(update, 1000);
+update();
+transit = 750;

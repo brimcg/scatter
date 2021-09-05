@@ -1,4 +1,7 @@
-//Copyright Brian McGinnis 2017
+//Copyright Brian McGinnis 2021
+Scatter plot web app will plot CSV (comma-separated values) data view in textarea.  Data is editable.
+
+
 
 Scatter.js is a 2d plotting script, implemented with d3 version 4, intended to plot multiple arrays of Y values that share a common array of X values.  It is your responsibility to ensure matching array size.
 
@@ -42,14 +45,3 @@ Scatter() implements the plotting in the DOM.
 Global style for scatter plots are defined by
 
 	scatter.css
-	
-Usage example is given in exampleScatter folder using
-
-	exampleScatter.html
-		//modify d3.min.js link with appropriate path for your setup, requires v4
-	main.js
-
-
-
-
-	

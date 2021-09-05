@@ -1,5 +1,6 @@
-//Copyright Brian McGinnis 2021
-Scatter plot web app will plot CSV (comma-separated values) data view in textarea.  Data is editable.
+Copyright Brian McGinnis 2021
+
+Scatter plot web app will plot CSV (comma-separated values) data shown in textarea.  Data is editable and can contain multiple columns of Y data..
 
 
 

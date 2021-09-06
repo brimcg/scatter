@@ -1,4 +1,4 @@
-//Copyright Brian McGinnis 2017
+//Copyright Brian McGinnis 2021
 
 var color = d3.scaleOrdinal(d3.schemeCategory10);
 

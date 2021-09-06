@@ -26,25 +26,6 @@ updateDiv.append("button")
 	.text("Update")
 	.on("click", update);
 
-var loadDiv = body.append("div")
-	.attr("class", "content");
-
-loadDiv.append("button")
-	.text("Load")
-	.on("click", function() {
-		alert("Load");
-	});
-
-loadDiv.append("input")
-	.attr("type", "text")
-	.attr("placeholder", "URL or file...");
-
-loadDiv.append("button")
-	.text("Browse...")
-	.on("click", function() {
-		alert("Browse");
-	});
-
 body.append("div")
 	.attr("class", "content")
 	.text("Data for scatter plot (separated by commas)");

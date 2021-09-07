@@ -7,45 +7,17 @@ var body = d3.select("body")
 	.style("font-family", "san-serif")
 	.on("dblclick.zoom", null);
 
-//main
-body.append("h1")
-	.text("Scatter Plot");
-
-var main = body.append("div")
-	.attr("id", "main")
-	.attr("class", "content");
-var mainWidth = 1.0 * main.property("clientWidth");
-	
 //Create scatter plot
-var plot = new Scatter("#main", mainWidth, 0.67 * mainWidth);
+var plot = new Scatter("#Plot", 640, 480);
 
-var updateDiv = body.append("div")
-	.attr("class", "content");
-
-updateDiv.append("button")
-	.text("Update")
-	.on("click", update);
-
-body.append("div")
-	.attr("class", "content")
-	.text("Data for scatter plot (separated by commas)");
-
-var dataDiv = body.append("div")
-	.attr("id", "dataDiv")
-	.attr("class", "content");
-
-var dataArea = dataDiv.append("textarea")
+var dataArea = d3.select("#Data").append("textarea")
 	.attr("id", "dataArea")
 	.attr("name", "dataArea")
 	.attr("rows", "25")
-	.attr("cols", "100")
+	.attr("cols", "75")
 	.text("X,Y\n0,0\n1,1\n");
 
-body.append("div")
-	.attr("class", "content")
-	.text("...");
-
-var transit = 0;
+var transit = 1000;
 
 function update()
 {
@@ -83,4 +55,3 @@ function update()
 }
 
 update();
-transit = 750;

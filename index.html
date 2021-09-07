@@ -13,14 +13,14 @@
 		  <h2>Scatter Plot</h2>
 
 		  <div class="w3-row">
-			<a href="javascript:void(0)" onclick="openTab(event, 'Data')" id="defaultOpen">
-			  <div class="w3-third tablink w3-bottombar w3-hover-shadow w3-padding">Data (CSV)</div>
+			<a href="javascript:void(0)" onclick="openTab('Data')" id="tabDefault">
+			  <div class="w3-third tablink w3-bottombar w3-hover-shadow w3-padding" id="tabData">Data (CSV)</div>
 			</a>
-			<a href="javascript:void(0)" onclick="openTab(event, 'Plot');">
-			  <div class="w3-third tablink w3-bottombar w3-hover-shadow w3-padding">Plot</div>
+			<a href="javascript:void(0)" onclick="openTab('Plot')">
+			  <div class="w3-third tablink w3-bottombar w3-hover-shadow w3-padding" id="tabPlot">Plot</div>
 			</a>
-			<a href="javascript:void(0)" onclick="openTab(event, 'Layout');">
-			  <div class="w3-third tablink w3-bottombar w3-hover-shadow w3-padding">Layout</div>
+			<a href="javascript:void(0)" onclick="openTab('Layout')">
+			  <div class="w3-third tablink w3-bottombar w3-hover-shadow w3-padding" id="tabLayout">Layout</div>
 			</a>
 		  </div>
 
@@ -35,26 +35,6 @@
 		  <div id="Plot" class="w3-container city" style="display:none">
 		  </div>
 		</div>
-
-		<script>
-		function openTab(evt, tabName) {
-		  var i, x, tablinks;
-		  x = document.getElementsByClassName("city");
-		  for (i = 0; i < x.length; i++) {
-			x[i].style.display = "none";
-		  }
-		  tablinks = document.getElementsByClassName("tablink");
-		  for (i = 0; i < x.length; i++) {
-			tablinks[i].className = tablinks[i].className.replace(" w3-border-green", "");
-		  }
-		  document.getElementById(tabName).style.display = "block";
-		  evt.currentTarget.firstElementChild.className += " w3-border-green";
-
-		  if(tabName == "Plot") { update(); }
-		}
-
-		document.getElementById("defaultOpen").click();
-		</script>
 
 		<script src="d3.min.js"></script>
 		<script src="scatter.js"></script>

@@ -1,4 +1,19 @@
 //Copyright Brian McGinnis 2021
+function openTab(tabName) {
+	d3.selectAll(".city")
+		.style("display", "none");
+
+	d3.selectAll(".tablink")
+		.classed("w3-border-green", false);
+	
+	d3.select("#tab"+tabName)
+		.classed("w3-border-green", true);
+
+	d3.select("#"+tabName)
+		.style("display", "block");
+	
+	if(tabName == "Plot") { update(); }
+}
 
 var color = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -15,7 +30,7 @@ var dataArea = d3.select("#Data").append("textarea")
 	.attr("name", "dataArea")
 	.attr("rows", "25")
 	.attr("cols", "75")
-	.text("X,Y\n0,0\n1,1\n");
+	.text("-1,-1,-2\n0,0,0\n1,1,2\n");
 
 var transit = 1000;
 
@@ -46,7 +61,7 @@ function update()
 		plotData.pushY(d, null, color(i));
 	});
 	plotData.scales(plotData.autoX(), plotData.autoY());
-	plotData.labels("X-axis", "Y-axis");
+	plotData.labels("Domain", "Range");
 	plotData.pushReferenceX(0);
 	plotData.pushReferenceY(0);
 	plotData.transit(transit);
@@ -54,4 +69,6 @@ function update()
 	plot.update(plotData);
 }
 
+//Let's go!
+openTab("Data");
 update();

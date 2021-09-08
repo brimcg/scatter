@@ -1,24 +1,8 @@
 //Copyright Brian McGinnis 2021
-function openTab(tabName) {
-	d3.selectAll(".city")
-		.style("display", "none");
-
-	d3.selectAll(".tablink")
-		.classed("w3-border-green", false);
-	
-	d3.select("#tab"+tabName)
-		.classed("w3-border-green", true);
-
-	d3.select("#"+tabName)
-		.style("display", "block");
-	
-	if(tabName == "Plot") { update(); }
-}
-
 var color = d3.scaleOrdinal(d3.schemeCategory10);
 
 //layout view
-var body = d3.select("body")
+d3.select("body")
 	.style("font-family", "san-serif")
 	.on("dblclick.zoom", null);
 
@@ -26,13 +10,19 @@ var body = d3.select("body")
 var plot = new Scatter("#Plot", 640, 480);
 
 var dataArea = d3.select("#Data").append("textarea")
-	.attr("id", "dataArea")
-	.attr("name", "dataArea")
 	.attr("rows", "25")
 	.attr("cols", "75")
 	.text("-1,-1,-2\n0,0,0\n1,1,2\n");
 
 var transit = 1000;
+
+function openPage(tabName) {
+	d3.selectAll(".tabcontent").style("display", "none");
+	d3.selectAll(".tabactive").attr("class", "tablink");
+	d3.select("#tab"+tabName).attr("class", "tabactive");
+	d3.select("#"+tabName).style("display", "block");
+	if(tabName == "Plot") { update(); }
+}
 
 function update()
 {
@@ -58,7 +48,8 @@ function update()
 	var plotData = new ScatterData();
 	plotData.loadX(dataParsed[0]);
 	dataParsed.slice(1).forEach(function(d, i) {
-		plotData.pushY(d, null, color(i));
+		plotData.pushY(d, "line", color(i));
+		plotData.pushY(d, "points", color(i), null, 5);
 	});
 	plotData.scales(plotData.autoX(), plotData.autoY());
 	plotData.labels("Domain", "Range");
@@ -70,5 +61,5 @@ function update()
 }
 
 //Let's go!
-openTab("Data");
+openPage("Data");
 update();

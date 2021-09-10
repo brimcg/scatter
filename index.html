@@ -13,14 +13,52 @@
 		<button class="tablink" onclick="openPage('Layout')" id="tabLayout">Layout</button>
 		<div id="Data" class="tabcontent">
 			<h3>Data</h3>
-			<p>Enter rows of data in comma-separated format: x, y1, y2, ...</p>
+			<h4>Enter rows of data with columns separated by commas: x, y1, y2,...</h4>
 		</div>
 		<div id="Plot" class="tabcontent">
 			<h3>Plot</h3>
 		</div>
 		<div id="Layout" class="tabcontent">
-			<h3>Layout</h3>
-			<p>Under construction...</p> 
+			<h3>Layout (under construction)</h3>
+			<h4>Labels</h4> 
+			<label for="xlabel">X axis label:</label>
+			<input type="text" id="xlabel" name="xlabel" value="Domain"><br>
+			<label for="ylabel">Y axis label:</label>
+			<input type="text" id="ylabel" name="ylabel" value="Range"><br>
+
+			<h4>Axes</h4> 
+			<label for="xmin">X min:</label>
+			<input type="number" class="xlimaxes" id="xmin" name="xmin" disabled><br>
+			<label for="xmax">X max:</label>
+			<input type="number" class="xlimaxes" id="xmax" name="xmax" disabled><br>
+			<label for="xauto">X autoscale</label>
+			<input type="checkbox" id="xauto" name="xauto" checked><br>
+			<label for="ymin">Y min:</label>
+			<input type="number" class="ylimaxes" id="ymin" name="ymin" disabled><br>
+			<label for="ymax">Y max:</label>
+			<input type="number" class="ylimaxes" id="ymax" name="ymax" disabled><br>
+			<label for="yauto">Y autoscale</label>
+			<input type="checkbox" id="yauto" name="yauto" checked><br>
+
+			<h4>Styles</h4> 
+			<label for="plotpoints">Points</label>
+			<input type="checkbox" id="plotpoints" name="plotpoints" checked><br>
+			<label for="plotline">Line</label>
+			<input type="checkbox" id="plotline" name="plotline" checked><br>
+			<label for="plotarea">Area</label>
+			<input type="checkbox" id="plotarea" name="plotarea"><br>
+
+			<h4>Size</h4> 
+			<label for="xplotsize">Width (pixels):</label>
+			<input type="number" id="xplotsize" name="xplotsize" disabled><br>
+			<label for="plotfit">Autoscale width</label>
+			<input type="checkbox" id="plotfit" name="plotfit" checked><br>
+			<label for="plotmax">Auto width max:</label>
+			<input type="number" id="plotmax" name="plotmax" value="640"><br>
+			<label for="xplotaspect">Aspect ratio:</label>
+			<input type="number" id="xplotaspect" name="xplotaspect" size="5" value="4">
+			<label for="yplotaspect" style="display:inline;">:</label>
+			<input type="number" id="yplotaspect" name="yplotaspect" size="5" value="3"><br>
 		</div>
 
 		<script src="d3.min.js"></script>

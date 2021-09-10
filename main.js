@@ -1,20 +1,27 @@
 //Copyright Brian McGinnis 2021
 var color = d3.scaleOrdinal(d3.schemeCategory10);
 
-//layout view
-d3.select("body")
-	.style("font-family", "san-serif")
-	.on("dblclick.zoom", null);
-
 //Create scatter plot
-var plot = new Scatter("#Plot", 640, 480);
+d3.select("#Plot").style("display", "block");
+var base = parseInt(d3.select("#Plot").node().clientWidth / 4.4, 10);
+if(base > 160) { base = 160; }
+var plot = new Scatter("#Plot", 4*base, 3*base);
 
 var dataArea = d3.select("#Data").append("textarea")
-	.attr("rows", "25")
-	.attr("cols", "75")
+	.style("width", 4*base+"px")
+	.style("height", 3*base+"px")
+	.style("resize", "none")
+	.style("white-space", "pre")
 	.text("-1,-1,-2\n0,0,0\n1,1,2\n");
 
-var transit = 1000;
+d3.select("#yauto")
+	.on("change", function() {
+		d3.selectAll(".ylimaxes").property("disabled", d3.select("#yauto").property("checked"));	
+	});
+d3.select("#xauto")
+	.on("change", function() {
+		d3.selectAll(".xlimaxes").property("disabled", d3.select("#xauto").property("checked"));	
+	});
 
 function openPage(tabName) {
 	d3.selectAll(".tabcontent").style("display", "none");
@@ -24,6 +31,7 @@ function openPage(tabName) {
 	if(tabName == "Plot") { update(); }
 }
 
+var duration = 250;
 function update()
 {
 	var data = d3.csvParseRows(dataArea.property("value"));
@@ -45,17 +53,43 @@ function update()
 	});
 	dataParsed = d3.transpose(dataParsed);
 	
+	var styles = ["area", "line", "points"];
+	var classes = ["area", "line", "point"];
+	styles.forEach(function(d, i) {
+		if(!d3.select("#plot"+d).property("checked")) { d3.selectAll("svg .plot ." + classes[i]).transition().duration(duration).remove(); }	
+	});
+
 	var plotData = new ScatterData();
 	plotData.loadX(dataParsed[0]);
-	dataParsed.slice(1).forEach(function(d, i) {
-		plotData.pushY(d, "line", color(i));
-		plotData.pushY(d, "points", color(i), null, 5);
+	styles.forEach(function(s) {
+		dataParsed.slice(1).forEach(function(d, i) {
+			if(d3.select("#plot"+s).property("checked")) { plotData.pushY(d, s, color(i), null, 5); }
+		});
 	});
-	plotData.scales(plotData.autoX(), plotData.autoY());
-	plotData.labels("Domain", "Range");
+
+	var xext, yext;
+	if(d3.select("#xauto").property("checked")) {
+		xext = plotData.autoX();
+		d3.select("#xmin").property("value", xext[0]);
+		d3.select("#xmax").property("value", xext[1]);
+	}
+	else {
+		xext = [+d3.select("#xmin").property("value"), +d3.select("#xmax").property("value")];
+	}
+	if(d3.select("#yauto").property("checked")) {
+		yext = plotData.autoY();
+		d3.select("#ymin").property("value", yext[0]);
+		d3.select("#ymax").property("value", yext[1]);
+	}
+	else {
+		yext = [+d3.select("#ymin").property("value"), +d3.select("#ymax").property("value")];
+	}
+	
+	plotData.scales(xext, yext);
+	plotData.labels(d3.select("#xlabel").property("value"), d3.select("#ylabel").property("value"));
 	plotData.pushReferenceX(0);
 	plotData.pushReferenceY(0);
-	plotData.transit(transit);
+	plotData.transit(duration)
 
 	plot.update(plotData);
 }

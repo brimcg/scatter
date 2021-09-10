@@ -2,9 +2,16 @@
 
 /* Set height of body and the document to 100% */
 body, html {
+  background-color: hsl(33, 46%, 95%);
   height: 100%;
   margin: 0;
   font-family: Arial;
+}
+
+label {
+  display: inline-block;
+  width: 120px;
+  text-align: right;
 }
 
 /* Style tab links */
@@ -28,7 +35,6 @@ body, html {
   float: left;
   border: none;
   outline: none;
-  cursor: pointer;
   padding: 14px 16px;
   font-size: 17px;
   width: 33.333%;
@@ -38,17 +44,6 @@ body, html {
 .tabcontent {
   display: none;
   padding: 50px 20px;
-  height: 100%;
-  background-color: hsl(33, 46%, 95%);
-}
-
-.content {
-  max-width: 960px;
-  min-height: 50px;
-  margin: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background-color: hsl(33, 46%, 95%);
 }
 

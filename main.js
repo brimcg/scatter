@@ -22,6 +22,10 @@ d3.select("#xauto")
 	.on("change", function() {
 		d3.selectAll(".xlimaxes").property("disabled", d3.select("#xauto").property("checked"));	
 	});
+d3.select("#plotfit")
+	.on("change", function() {
+		d3.select("#xplotsize").property("disabled", d3.select("#plotfit").property("checked"));	
+	});
 
 function openPage(tabName) {
 	d3.selectAll(".tabcontent").style("display", "none");
@@ -55,9 +59,9 @@ function update()
 	
 	var styles = ["area", "line", "points"];
 	var classes = ["area", "line", "point"];
-	styles.forEach(function(d, i) {
-		if(!d3.select("#plot"+d).property("checked")) { d3.selectAll("svg .plot ." + classes[i]).transition().duration(duration).remove(); }	
-	});
+//	styles.forEach(function(d, i) {
+//		if(!d3.select("#plot"+d).property("checked")) { d3.selectAll("svg .plot ." + classes[i]).transition().duration(duration).remove(); }	
+//	});
 
 	var plotData = new ScatterData();
 	plotData.loadX(dataParsed[0]);
@@ -91,9 +95,9 @@ function update()
 	plotData.pushReferenceY(0);
 	plotData.transit(duration)
 
+	d3.selectAll("svg .plot").remove();
 	plot.update(plotData);
 }
 
 //Let's go!
 openPage("Data");
-update();

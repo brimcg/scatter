@@ -1,19 +1,19 @@
 //Copyright Brian McGinnis 2021
+
+//Initialize
+var plot;
 var color = d3.scaleOrdinal(d3.schemeCategory10);
-
-//Create scatter plot
-d3.select("#Plot").style("display", "block");
-var base = parseInt(d3.select("#Plot").node().clientWidth / 4.4, 10);
-if(base > 160) { base = 160; }
-var plot = new Scatter("#Plot", 4*base, 3*base);
-
+var xa = d3.select("#xplotaspect").property("value");
+var ya = d3.select("#yplotaspect").property("value");
+var base = parseInt(d3.select("#Plot").node().clientWidth / (1.1*xa), 10);
 var dataArea = d3.select("#Data").append("textarea")
-	.style("width", 4*base+"px")
-	.style("height", 3*base+"px")
+	.style("width", xa*base+"px")
+	.style("height", ya*base+"px")
 	.style("resize", "none")
 	.style("white-space", "pre")
 	.text("-1,-1,-2\n0,0,0\n1,1,2\n");
 
+//Create scatter plot
 d3.select("#yauto")
 	.on("change", function() {
 		d3.selectAll(".ylimaxes").property("disabled", d3.select("#yauto").property("checked"));	
@@ -27,6 +27,23 @@ d3.select("#plotfit")
 		d3.select("#xplotsize").property("disabled", d3.select("#plotfit").property("checked"));	
 	});
 
+function resizePlot() {
+	base = d3.select("#xplotsize").property("value") / xa;
+	var maxbase = d3.select("#plotmax").property("value");
+	xa = d3.select("#xplotaspect").property("value");
+	ya = d3.select("#yplotaspect").property("value");
+	d3.select("#Plot").style("display", "block");
+	if(d3.select("#plotfit").property("checked")) {
+		base = parseInt(d3.select("#Plot").node().clientWidth / (1.1*xa), 10);
+		if(base > maxbase/xa) { base = maxbase/xa; }
+	}
+	plot = new Scatter("#Plot", xa*base, ya*base);
+
+	dataArea = d3.select("textarea")
+		.style("width", xa*base+"px")
+		.style("height", ya*base+"px");
+}
+
 function openPage(tabName) {
 	d3.selectAll(".tabcontent").style("display", "none");
 	d3.selectAll(".tabactive").attr("class", "tablink");
@@ -38,6 +55,8 @@ function openPage(tabName) {
 var duration = 250;
 function update()
 {
+	d3.select("svg").remove();
+	resizePlot();
 	var data = d3.csvParseRows(dataArea.property("value"));
 	var cols = 0;
 	data.forEach(function(row) {
@@ -95,9 +114,10 @@ function update()
 	plotData.pushReferenceY(0);
 	plotData.transit(duration)
 
-	d3.selectAll("svg .plot").remove();
+	d3.selectAll(".plot").remove();
 	plot.update(plotData);
 }
 
 //Let's go!
+resizePlot();
 openPage("Data");

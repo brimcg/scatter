@@ -13,20 +13,15 @@ var dataArea = d3.select("#Data").append("textarea")
 	.style("white-space", "pre")
 	.text("-1,-1,-2\n0,0,0\n1,1,2\n");
 
-//Create scatter plot
-d3.select("#yauto")
-	.on("change", function() {
-		d3.selectAll(".ylimaxes").property("disabled", d3.select("#yauto").property("checked"));	
-	});
-d3.select("#xauto")
-	.on("change", function() {
-		d3.selectAll(".xlimaxes").property("disabled", d3.select("#xauto").property("checked"));	
-	});
-d3.select("#plotfit")
-	.on("change", function() {
-		d3.select("#xplotsize").property("disabled", d3.select("#plotfit").property("checked"));	
-	});
+//connect input disable to auto checkboxes
+function disenable(control, item) {
+	var ctl = d3.select(control);
+	ctl.on("change", function() {
+			d3.selectAll(item).property("disabled", ctl.property("checked"));	
+		});
+}
 
+//Create scatter plot
 function resizePlot() {
 	base = d3.select("#xplotsize").property("value") / xa;
 	var maxbase = d3.select("#plotmax").property("value");
@@ -119,5 +114,9 @@ function update()
 }
 
 //Let's go!
+disenable("#yauto", ".ylimaxes");
+disenable("#xauto", ".xlimaxes");
+disenable("#plotfit", "#xplotsize");
+
 resizePlot();
 openPage("Data");

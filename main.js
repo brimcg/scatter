@@ -22,21 +22,32 @@ function disenable(control, item) {
 }
 
 //Create scatter plot
-function resizePlot() {
+function resize() {
 	base = d3.select("#xplotsize").property("value") / xa;
 	var maxbase = d3.select("#plotmax").property("value");
 	xa = d3.select("#xplotaspect").property("value");
 	ya = d3.select("#yplotaspect").property("value");
+	var pd = d3.select("#Plot").style("display");
 	d3.select("#Plot").style("display", "block");
 	if(d3.select("#plotfit").property("checked")) {
 		base = parseInt(d3.select("#Plot").node().clientWidth / (1.1*xa), 10);
 		if(base > maxbase/xa) { base = maxbase/xa; }
 	}
-	plot = new Scatter("#Plot", xa*base, ya*base);
+	d3.select("#Plot").style("display", pd);
+	return [xa, ya];
+}
 
+function resizePlot() {
+	var d = resize();
+	d3.selectAll("svg").remove();
+	plot = new Scatter("#Plot", d[0]*base, d[1]*base);
+}
+
+function resizeData() {
+	var d = resize();
 	dataArea = d3.select("textarea")
-		.style("width", xa*base+"px")
-		.style("height", ya*base+"px");
+		.style("width", d[0]*base+"px")
+		.style("height", d[1]*base+"px");
 }
 
 function openPage(tabName) {
@@ -50,7 +61,7 @@ function openPage(tabName) {
 var duration = 250;
 function update()
 {
-	d3.select("svg").remove();
+	resizeData();
 	resizePlot();
 	var data = d3.csvParseRows(dataArea.property("value"));
 	var cols = 0;
@@ -113,10 +124,19 @@ function update()
 	plot.update(plotData);
 }
 
-//Let's go!
+//event handling
+window.addEventListener("resize", function() {
+	if("tabactive" == d3.select("#tabPlot").attr("class")) {
+		update();
+		return;
+	}
+	resizeData();
+});
 disenable("#yauto", ".ylimaxes");
 disenable("#xauto", ".xlimaxes");
 disenable("#plotfit", "#xplotsize");
 
+//Let's go!
+resizeData();
 resizePlot();
 openPage("Data");
